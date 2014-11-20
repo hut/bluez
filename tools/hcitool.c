@@ -2409,6 +2409,9 @@ static int print_advertising_devices(int dd, uint8_t filter_type)
 	sa.sa_handler = sigint_handler;
 	sigaction(SIGINT, &sa, NULL);
 
+	FILE *f = fopen("/tmp/out", "w");
+	int input;
+
 	while (1) {
 		evt_le_meta_event *meta;
 		le_advertising_info *info;
@@ -2444,7 +2447,18 @@ static int print_advertising_devices(int dd, uint8_t filter_type)
 			eir_parse_name(info->data, info->length,
 							name, sizeof(name) - 1);
 
-			printf("%s %s\n", addr, name);
+			//printf("%s %s\n", addr, name);
+
+			if (name[0] == 'C' && name[1] == 'A' && name[2] == 'P') {
+				input = (name[3] - '0') * 100 + (name[4] - '0') * 10 + (name[5] - '0');
+				printf("%d\n", input);
+				if (input > 100) {
+					printf("\a");
+					fflush(stdout);
+				}
+				fprintf(f, "%s %s\n", addr, name);
+				fflush(f);
+			}
 		}
 	}
 
