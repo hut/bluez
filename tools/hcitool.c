@@ -2451,9 +2451,19 @@ static int print_advertising_devices(int dd, uint8_t filter_type)
 			/* CUSTOM */
 			//printf("%s %s\n", addr, name);
 
-			if (name[0] == 'C' && name[1] == 'A' && name[2] == 'P') {
+			printf("[MAC:%s]---[NAME:%s]---[%s]---:", addr, name, info->data);
+			for (i = 0; i < 18; i++) {
+				printf(" %3d", info->data[i]);
+			}
+			printf("\n");
+
+//			printf("LOL: %d %d %d %d %d %d %d %d\n", info->data[0], info->data[1], info->data[2], info->data[3], info->data[4], info->data[5], info->data[6]);
+//			printf("KEK: %s\n", info->data);
+
+			if (0 && name[0] == 'C' && name[1] == 'A' && name[2] == 'P') {
 				input = (name[3] - '0') * 100 + (name[4] - '0') * 10 + (name[5] - '0');
 				printf("%d\n", input);
+				printf("%s\n", info->data);
 				f = fopen("/tmp/out", "w");
 				fprintf(f, "%d\n", input);
 				fclose(f);
